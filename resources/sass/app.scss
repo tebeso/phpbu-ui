@@ -1,0 +1,59 @@
+// Fonts
+@import url('https://fonts.bunny.net/css?family=Nunito');
+
+// Variables
+@import 'variables';
+
+// Bootstrap
+@import 'bootstrap/scss/bootstrap';
+
+// Bootstrap Icons
+@import 'boxicons';
+
+.logo {
+  background-color: $red;
+  width:            160px;
+  float:            left;
+  color:            white;
+  font-size:        16px;
+  font-weight:      bold;
+  cursor:           pointer;
+}
+
+a {
+  text-decoration: none !important;
+  color:           white !important;
+  cursor:          pointer;
+}
+
+.arrow-right {
+  float:         left;
+  border-top:    25px solid transparent;
+  border-bottom: 25px solid transparent;
+  border-left:   25px solid $red;
+}
+
+.mt-6 {
+  margin-top: 4rem !important;
+}
+
+.mt-7 {
+  margin-top: 5rem !important;
+}
+
+#contentCard {
+  display: none !important;
+}
+
+.icon {
+  cursor: pointer;
+}
+
+.text-grey {
+  color: grey !important;
+}
+
+.h-35px {
+  height:      35px;
+  line-height: 35px;
+}
