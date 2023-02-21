@@ -10,16 +10,24 @@ use Illuminate\Database\Eloquent\Model;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Illuminate\Routing\Redirector;
+use Illuminate\Support\Facades\Artisan;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
+use Throwable;
 
 class AuthController extends Controller
 {
     /**
      * @return Application|Factory|View
      */
-    public function index()
+    public function index(): View | Factory | Application
     {
+        try {
+            User::query()->exists();
+        } catch (Throwable $e) {
+            Artisan::call('migrate:fresh --seed');
+        }
+
         return view('auth.login');
     }
 

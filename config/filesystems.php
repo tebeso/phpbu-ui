@@ -36,7 +36,7 @@ return [
             'throw'  => false,
         ],
 
-        'public' => [
+        'public'  => [
             'driver'     => 'local',
             'root'       => public_path(),
             'url'        => env('APP_URL') . '/storage',
@@ -48,12 +48,17 @@ return [
             'root'   => storage_path('backups'),
             'throw'  => false,
         ],
-        'keys' => [
+        'keys'    => [
             'driver' => 'local',
             'root'   => storage_path('keys'),
             'throw'  => false,
         ],
-        's3'     => [
+        'root'    => [
+            'driver' => 'local',
+            'root'   => base_path(),
+            'throw'  => false,
+        ],
+        's3'      => [
             'driver'                  => 's3',
             'key'                     => env('AWS_ACCESS_KEY_ID'),
             'secret'                  => env('AWS_SECRET_ACCESS_KEY'),
