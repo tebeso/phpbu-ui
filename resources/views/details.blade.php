@@ -7,6 +7,12 @@
 
 @section('contentCard')
     @php($carbon = new \Carbon\Carbon())
+
+    @if($hasCredentials === false)
+        <div id="no-credentials" class="alert alert-danger">
+            Credentials are not set. Please check your server configuration.
+        </div>
+    @endif
     <table class="table table-sm">
         <thead>
         <tr>
@@ -31,7 +37,7 @@
         <div id="progress-bar" class="progress-bar bg-success" role="progressbar" style="width: 0"></div>
     </div>
 
-    <div class="alert alert-danger" role="alert">
+    <div class="alert alert-info" role="alert">
         You are about to restore a backup. The following commands will be issued:
 
         <ul class="mb-3">
@@ -74,7 +80,7 @@
                 let currentValue  = $(this).val();
                 let requiredValue = $('td:first-child').text();
 
-                if (currentValue === requiredValue) {
+                if (currentValue === requiredValue && $('#no-credentials').length === 0) {
                     $('#restore-button').prop('disabled', false);
                 } else {
                     $('#restore-button').prop('disabled', true);

@@ -19,26 +19,23 @@
 
     @if(Auth::check())
         <div class="float-end" style="margin-right:10px;">
-            <button class="btn btn-danger" ic-get-from="{{ url('/scan-backups') }}">Scan for Backups</button>
+            <button id="scan-backups" class="btn btn-danger" ic-get-from="{{ url('/scan-backups') }}">Scan for Backups
+            </button>
             <button class="btn btn-danger"><a href="{{ url('/logout') }}">Logout</a></button>
         </div>
     @endif
 </div>
-<div class="container mt-7">
+
+@include('loading')
+
+<div id="content" class="container mt-7">
     @yield('content')
     <div id="contentCard" class="card shadow border-0 p-3">
         @yield('contentCard')
     </div>
 </div>
 
-<script>
-    $(document).ready(function () {
-        let contentCard = $('#contentCard');
+@include('footer-scripts')
 
-        if ($.trim(contentCard.html())) {
-            contentCard.attr('style', 'display: block !important');
-        }
-    });
-</script>
 </body>
 </html>

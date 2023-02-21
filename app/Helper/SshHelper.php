@@ -4,6 +4,7 @@ namespace App\Helper;
 
 use DivineOmega\SSHConnection\SSHConnection;
 use Illuminate\Support\Collection;
+use Illuminate\Support\Facades\Storage;
 use Throwable;
 
 class SshHelper
@@ -25,10 +26,10 @@ class SshHelper
             ->as($sshConfig['user'])
             ->timeout($timeout);
 
-        if (isset($sshConfig['password'])) {
-            $connection->withPassword($sshConfig['password']);
+        if (self::isKeyExisting($sshConfig)) {
+            $connection->withPrivateKey(Storage::disk('keys')->path($sshConfig['ssh-key']));
         } else {
-            $connection->withPrivateKey('keys/id_rsa');
+            $connection->withPassword($sshConfig['password']);
         }
 
         $this->setConnection($connection->connect());
@@ -75,6 +76,7 @@ class SshHelper
         return $error;
     }
 
+
     /**
      * @return SSHConnection
      */
@@ -82,6 +84,7 @@ class SshHelper
     {
         return $this->connection;
     }
+
 
     /**
      * @param SSHConnection $connection
@@ -92,5 +95,53 @@ class SshHelper
     {
         $this->connection = $connection;
         return $this;
+    }
+
+
+    /**
+     * @param array $sshConfig
+     *
+     * @return bool
+     */
+    public static function usesSshKey(array $sshConfig): bool
+    {
+        if (isset($sshConfig['ssh-key'])) {
+            return true;
+        }
+
+        return false;
+    }
+
+
+    /**
+     * @param array $sshConfig
+     *
+     * @return bool
+     */
+    public static function isKeyExisting(array $sshConfig): bool
+    {
+        return self::usesSshKey($sshConfig) && Storage::disk('keys')->exists($sshConfig['ssh-key']);
+    }
+
+
+    /**
+     * @param array $sshConfig
+     *
+     * @return bool
+     */
+    public static function hasPassword(array $sshConfig): bool
+    {
+        return isset($sshConfig['password']) === true;
+    }
+
+
+    /**
+     * @param array $sshConfig
+     *
+     * @return bool
+     */
+    public static function hasCredentials(array $sshConfig): bool
+    {
+        return self::hasPassword($sshConfig) || self::isKeyExisting($sshConfig);
     }
 }

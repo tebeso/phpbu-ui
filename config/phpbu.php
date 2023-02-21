@@ -24,14 +24,16 @@ return [
     ],
     'server'      => [
         'hs1' => [
-            'host' => 'hs1.frantos.com',
-            'user' => 'root',
-            'port' => 22,
+            'host'    => 'hs1.frantos.com',
+            'user'    => 'root',
+            'port'    => 22,
+            'ssh-key' => 'id_rsa',
         ],
         'hs2' => [
-            'host' => 'hs2.frantos.com',
-            'user' => 'root',
-            'port' => 22,
+            'host'    => 'hs2.frantos.com',
+            'user'    => 'root',
+            'port'    => 22,
+            'ssh-key' => 'id_rsa',
         ],
     ],
     'commands'    => [
@@ -90,9 +92,18 @@ return [
             'name'        => 'Terminal MySQL',
             'server'      => 'hs2',
             'commands'    => [
-                'bzip2 -dkv $directory$filename.bz2',
-                'tar -xvf $directory$filename -C $directory',
-
+                [
+                    'command'     => 'cd phpbu && phpbu --limit=terminal',
+                    'description' => 'Create backup of current files',
+                ],
+                [
+                    'command'     => 'cp -r $backupPath$/$server$/$filename$ $temp$/$filename$',
+                    'description' => 'Copy backup from backup drive to temp folder',
+                ],
+                [
+                    'command'     => 'cd $temp$ && tar -xf $filename$',
+                    'description' => 'Extract backup',
+                ],
             ],
             'description' => '',
         ],
@@ -100,7 +111,18 @@ return [
             'name'        => 'MatrixService Files',
             'server'      => 'hs2',
             'commands'    => [
-
+                [
+                    'command'     => 'cd phpbu && phpbu --limit=terminal',
+                    'description' => 'Create backup of current files',
+                ],
+                [
+                    'command'     => 'cp -r $backupPath$/$server$/$filename$ $temp$/$filename$',
+                    'description' => 'Copy backup from backup drive to temp folder',
+                ],
+                [
+                    'command'     => 'cd $temp$ && tar -xf $filename$',
+                    'description' => 'Extract backup',
+                ],
             ],
             'description' => '',
         ],
@@ -108,7 +130,18 @@ return [
             'name'        => 'MatrixService MySQL',
             'server'      => 'hs2',
             'commands'    => [
-
+                [
+                    'command'     => 'cd phpbu && phpbu --limit=terminal',
+                    'description' => 'Create backup of current files',
+                ],
+                [
+                    'command'     => 'cp -r $backupPath$/$server$/$filename$ $temp$/$filename$',
+                    'description' => 'Copy backup from backup drive to temp folder',
+                ],
+                [
+                    'command'     => 'cd $temp$ && tar -xf $filename$',
+                    'description' => 'Extract backup',
+                ],
             ],
             'description' => '',
         ],
@@ -116,7 +149,18 @@ return [
             'name'        => 'B2BGate MySQL',
             'server'      => 'hs1',
             'commands'    => [
-
+                [
+                    'command'     => 'cd phpbu && phpbu --limit=terminal',
+                    'description' => 'Create backup of current files',
+                ],
+                [
+                    'command'     => 'cp -r $backupPath$/$server$/$filename$ $temp$/$filename$',
+                    'description' => 'Copy backup from backup drive to temp folder',
+                ],
+                [
+                    'command'     => 'cd $temp$ && tar -xf $filename$',
+                    'description' => 'Extract backup',
+                ],
             ],
             'description' => '',
         ],
@@ -124,7 +168,18 @@ return [
             'name'        => 'Pimcore Files',
             'server'      => 'hs1',
             'commands'    => [
-
+                [
+                    'command'     => 'cd phpbu && phpbu --limit=terminal',
+                    'description' => 'Create backup of current files',
+                ],
+                [
+                    'command'     => 'cp -r $backupPath$/$server$/$filename$ $temp$/$filename$',
+                    'description' => 'Copy backup from backup drive to temp folder',
+                ],
+                [
+                    'command'     => 'cd $temp$ && tar -xf $filename$',
+                    'description' => 'Extract backup',
+                ],
             ],
             'description' => '',
         ],
@@ -132,7 +187,18 @@ return [
             'name'        => 'Pimcore MySQL',
             'server'      => 'hs1',
             'commands'    => [
-
+                [
+                    'command'     => 'cd phpbu && phpbu --limit=terminal',
+                    'description' => 'Create backup of current files',
+                ],
+                [
+                    'command'     => 'cp -r $backupPath$/$server$/$filename$ $temp$/$filename$',
+                    'description' => 'Copy backup from backup drive to temp folder',
+                ],
+                [
+                    'command'     => 'cd $temp$ && tar -xf $filename$',
+                    'description' => 'Extract backup',
+                ],
             ],
             'description' => '',
         ],

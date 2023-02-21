@@ -19,6 +19,9 @@ use Illuminate\Support\Str;
 
 class BackupController extends Controller
 {
+    /**
+     * @return View|Factory|Application
+     */
     public function index(): View | Factory | Application
     {
         return view(
@@ -54,13 +57,16 @@ class BackupController extends Controller
      */
     public function indexDetails(string $backupId): View | Factory | Application
     {
-        $backup = FileHelper::getBackupInfoById($backupId);
+        $backup         = FileHelper::getBackupInfoById($backupId);
+        $server         = $backup->getAttribute('server');
+        $hasCredentials = SshHelper::hasCredentials(config('phpbu.server.' . $server));
 
         return view(
             'details',
             [
-                'config' => ConfigHelper::getConfigs($backup->getAttribute('type')),
-                'backup' => $backup,
+                'config'         => ConfigHelper::getConfigs($backup->getAttribute('type')),
+                'backup'         => $backup,
+                'hasCredentials' => $hasCredentials,
             ]
         );
     }
@@ -113,8 +119,6 @@ class BackupController extends Controller
 
 
     /**
-     * TODO: Needs to check if the backup file actually exists before starting the restore process.
-     *
      * @param Request $request
      *
      * @return void
