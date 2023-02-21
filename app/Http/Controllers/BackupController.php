@@ -6,16 +6,21 @@ use App\Helper\CommandHelper;
 use App\Helper\ConfigHelper;
 use App\Helper\FileHelper;
 use App\Helper\SshHelper;
+use App\Jobs\Command;
 use App\Models\Backup;
 use App\Models\Progress;
 use Exception;
 use Illuminate\Contracts\Foundation\Application;
 use Illuminate\Contracts\View\Factory;
 use Illuminate\Contracts\View\View;
+use Illuminate\Database\Eloquent\Builder;
+use Illuminate\Database\Eloquent\Model;
 use Illuminate\Http\Request;
 use Illuminate\Support\Collection;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Bus;
 use Illuminate\Support\Str;
+use Throwable;
 
 class BackupController extends Controller
 {
@@ -122,6 +127,7 @@ class BackupController extends Controller
      * @param Request $request
      *
      * @return void
+     * @throws Throwable
      */
     public static function restore(Request $request): void
     {
@@ -131,47 +137,43 @@ class BackupController extends Controller
         $backup   = FileHelper::getBackupInfoById($backupId);
         $commands = CommandHelper::prepareCommands($backup->getAttribute('filename'));
 
-        self::createProgressEntries($uuid, $commands);
-
-        $ssh = new SshHelper(config('phpbu.server.' . $backup->getAttribute('server')), 1200);
-
-        foreach ($commands as $command) {
-
-            $progressEntry = Progress::query()
-                ->where('uuid', $uuid)
-                ->where('command', $command['command'])->get()->first();
-
-            $process = $ssh->getConnection()->run($command['command']);
-
-            $progressEntry->update(
-                [
-                    'completed' => 1,
-                    'log'       => $process->getError() === '' ? 'OK' : $process->getError(),
-                ]
-            );
-        }
+        self::createJobs($uuid, $backup, $commands);
     }
 
 
     /**
-     * @param string     $uuid
-     * @param Collection $commands
+     * @param string        $uuid
+     * @param Model|Builder $backup
+     * @param Collection    $commands
      *
-     * @return string
+     * @return void
+     * @throws Throwable
      */
-    protected static function createProgressEntries(string $uuid, Collection $commands): string
+    protected static function createJobs(string $uuid, Model | Builder $backup, Collection $commands): void
     {
+        $jobs = [];
         foreach ($commands as $command) {
+
             Progress::query()->insert(
                 [
-                    'command'    => $command['command'],
-                    'uuid'       => $uuid,
-                    'created_by' => Auth::user()?->getAttribute('name'),
+                    'command'     => $command['command'],
+                    'uuid'        => $uuid,
+                    'backup_id'   => $backup->getAttribute('id'),
+                    'backup_type' => $backup->getAttribute('type'),
+                    'created_by'  => Auth::user()?->getAttribute('name'),
+                ]
+            );
+
+            $jobs[] = new Command(
+                [
+                    'uuid'    => $uuid,
+                    'command' => $command['command'],
+                    'backup'  => $backup,
                 ]
             );
         }
 
-        return $uuid;
+        Bus::batch($jobs)->allowFailures(false)->name($uuid)->dispatch();
     }
 
 

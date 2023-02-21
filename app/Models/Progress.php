@@ -10,6 +10,8 @@ class Progress extends Model
      * @var string[]
      */
     protected $fillable = [
+        'backup_id',
+        'backup_type',
         'completed',
         'log',
         'created_by',

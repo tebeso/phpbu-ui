@@ -15,3 +15,6 @@ yarn-error.log
 /.fleet
 /.idea
 /.vscode
+/docker/data/*
+/storage/keys/*
+supervisor*

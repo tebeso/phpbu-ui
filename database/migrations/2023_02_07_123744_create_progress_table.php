@@ -12,6 +12,8 @@ return new class extends Migration {
             $table->id();
             $table->integer('shell')->default(1);
             $table->uuid();
+            $table->integer('backup_id');
+            $table->string('backup_type');
             $table->string('command');
             $table->string('created_by');
             $table->longText('log')->nullable();

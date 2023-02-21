@@ -66,66 +66,9 @@
                     ic-post-to="/restore">Start Restore Job
             </button>
         </div>
-
-        <script>
-            let interval = null;
-            let url      = null;
-
-            $(document).ready(function () {
-                generateUuid();
-                $('#restore-button').prop('disabled', true);
-            });
-
-            $('#confirmation').keyup(function () {
-                let currentValue  = $(this).val();
-                let requiredValue = $('td:first-child').text();
-
-                if (currentValue === requiredValue && $('#no-credentials').length === 0) {
-                    $('#restore-button').prop('disabled', false);
-                } else {
-                    $('#restore-button').prop('disabled', true);
-                }
-            });
-
-            $(function () {
-                $('#restore-button').on('beforeSend.ic', function () {
-
-                    updateProgress(0);
-
-                    url      = '/restore/status/' + $('#uuid').val();
-                    interval = setInterval(function () {
-                        updateProgress(getStatus(url).responseText);
-                    }, 1000);
-                }).on('complete.ic', function () {
-                    updateProgress(getStatus(url).responseText);
-                    clearInterval(interval);
-                    generateUuid();
-                    $('#confirmation').val('').keyup();
-                });
-            });
-
-            function generateUuid() {
-                $.ajax({
-                    url:    '/generate-uuid',
-                    method: 'GET',
-                    async:  true,
-                }).done(function (d, j, r) {
-                    $('#uuid').val(r.responseText);
-                });
-            }
-
-            function getStatus(url) {
-                return $.ajax({
-                    url:    url,
-                    method: 'GET',
-                    async:  false,
-                });
-            }
-
-            function updateProgress(percent) {
-                $('#progress').text(percent);
-                $('#progress-bar').css('width', percent + '%');
-            }
-        </script>
     </form>
+@endsection
+
+@section('additional-footer-scripts')
+    @include('details-scripts')
 @endsection

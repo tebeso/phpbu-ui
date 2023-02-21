@@ -1,0 +1,80 @@
+version: "3"
+
+services:
+  webserver:
+    build:
+      args:
+        user: 1000
+        uid: 1000
+      context: ./docker/images/php
+    container_name: 'phpbu-php'
+    restart: 'always'
+    environment:
+      - PHP_IDE_CONFIG=serverName=phpbu
+      - TZ=Europe/Berlin
+    ports:
+      - '${DOCKER_PHP_PORT_HTTP}:80'
+      - '${DOCKER_PHP_PORT_HTTPS}:443'
+      - '${DOCKER_PHP_PORT_SUPERVISOR}:9001'
+    volumes:
+      # Work data
+      - .:/var/www/html
+      # Config: Apache2
+      - './docker/configs/php/sites-available/000-default.conf:/etc/apache2/sites-available/000-default.conf'
+
+      # Config: Supervisor
+      - './docker/configs/supervisor/worker/:/etc/supervisor/conf.d/'
+      - './docker/configs/supervisor/supervisord.conf:/etc/supervisor/supervisord.conf'
+
+      # Config: xDebug
+      - './docker/configs/xdebug/xdebug.ini:/usr/local/etc/php/conf.d/docker-php-ext-xdebug.ini'
+    links:
+      - mysql
+    extra_hosts:
+      - "host.docker.internal:host-gateway"
+    networks:
+      - phpbu
+
+  mysql:
+    build:
+      context: ./docker/images/mysql
+    container_name: 'phpbu-mysql'
+    restart: 'always'
+    ports:
+      - '${DOCKER_MYSQL_PORT}:3306'
+    environment:
+      MYSQL_ROOT_PASSWORD: ${DOCKER_MYSQL_ROOT_PASSWORD}
+      MYSQL_DATABASE: ${DOCKER_MYSQL_DATABASE}
+      MYSQL_USER: ${DOCKER_MYSQL_USERNAME}
+      MYSQL_PASSWORD: ${DOCKER_MYSQL_PASSWORD}
+      TZ: Europe/Berlin
+    volumes:
+      - '${DOCKER_MYSQL_DATA}:/var/lib/mysql'
+      - '${DOCKER_MYSQL_LOGS}:/var/log/mysql'
+      - '${DOCKER_MYSQL_CONFIG}:/etc/mysql/my.cnf'
+    networks:
+      - phpbu
+    cap_add:
+      - SYS_NICE  # CAP_SYS_NICE
+
+  rabbitmq:
+    build:
+      context: ./docker/images/rabbitmq
+    container_name: 'phpbu-rabbitmq'
+    restart: 'always'
+    ports:
+      - '127.0.0.1:${DOCKER_RABBITMQ_PORT_AMQP}:5672'
+      - '${DOCKER_RABBITMQ_PORT_HTTP}:${DOCKER_RABBITMQ_PORT_HTTP}'
+    environment:
+      RABBITMQ_DEFAULT_USER: ${DOCKER_RABBITMQ_USERNAME}
+      RABBITMQ_DEFAULT_PASS: ${DOCKER_RABBITMQ_PASSWORD}
+      TZ: Europe/Berlin
+    networks:
+      - phpbu
+
+volumes:
+  opensearch-data1:
+
+networks:
+  phpbu:
+    driver: bridge

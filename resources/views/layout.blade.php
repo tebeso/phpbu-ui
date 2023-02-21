@@ -36,6 +36,7 @@
 </div>
 
 @include('footer-scripts')
+@yield('additional-footer-scripts')
 
 </body>
 </html>
