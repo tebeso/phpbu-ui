@@ -50,14 +50,17 @@ class CommandHelper
     /**
      * @param $uuid
      *
-     * @return int
+     * @return array
      */
-    public static function status($uuid): int
+    public static function status($uuid): array
     {
         $entries   = Progress::query()->where('uuid', $uuid);
         $total     = $entries->count();
         $completed = $entries->where('completed', 1)->count();
 
-        return $completed / $total * 100;
+        return [
+            'progress' => $completed / $total * 100,
+            'log'      => $entries->get(),
+        ];
     }
 }

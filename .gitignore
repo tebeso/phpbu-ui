@@ -18,3 +18,5 @@ yarn-error.log
 /docker/data/*
 /storage/keys/*
 supervisor*
+public/css/app.css
+public/js/app.js

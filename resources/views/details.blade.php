@@ -65,6 +65,7 @@
             <button id="restore-button" disabled="disabled" class="btn btn-danger shadow"
                     ic-post-to="/restore">Start Restore Job
             </button>
+            <div id="loading-circle" class="loading-circle visually-hidden"></div>
         </div>
     </form>
 @endsection
