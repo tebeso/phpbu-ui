@@ -10,7 +10,7 @@ use Illuminate\Database\Eloquent\Model;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Illuminate\Routing\Redirector;
-use Illuminate\Support\Facades\Artisan;
+use Illuminate\Support\Facades\App;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
 use Throwable;
@@ -25,7 +25,7 @@ class AuthController extends Controller
         try {
             User::query()->exists();
         } catch (Throwable $e) {
-            Artisan::call('migrate:fresh --seed');
+            App::abort(403, 'Did you forget to run migrations?');
         }
 
         return view('auth.login');
@@ -37,7 +37,7 @@ class AuthController extends Controller
      *
      * @return Application|RedirectResponse|Redirector
      */
-    public function customLogin(Request $request)
+    public function customLogin(Request $request): Redirector | RedirectResponse | Application
     {
         $request->validate([
                                'email'    => 'required',
@@ -61,9 +61,9 @@ class AuthController extends Controller
      *
      * @return User|Model
      */
-    public static function create(array $data)
+    public static function create(array $data): Model | User
     {
-        return User::create(
+        return (new User)->create(
             [
                 'name'     => $data['name'],
                 'email'    => $data['email'],
@@ -78,7 +78,7 @@ class AuthController extends Controller
      *
      * @return Application|RedirectResponse|Redirector
      */
-    public function logout(Request $request)
+    public function logout(Request $request): Redirector | RedirectResponse | Application
     {
         $request->session()->flush();
         Auth::logout();

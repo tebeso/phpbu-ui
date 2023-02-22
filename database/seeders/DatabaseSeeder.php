@@ -16,14 +16,5 @@ class DatabaseSeeder extends Seeder
      */
     public function run(): void
     {
-        AuthController::create(
-            [
-                'name'     => 'Tebin Ulrich',
-                'email'    => 'tebin.ulrich@frantos.com',
-                'password' => 'Tebin1687!',
-            ]
-        );
-
-        (new BackupController())->ajaxScanForBackups();
     }
 }
