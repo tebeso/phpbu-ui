@@ -2,6 +2,7 @@
 
 namespace App\Jobs;
 
+use App\Events\BackupInProgress;
 use App\Helper\SshHelper;
 use App\Models\Progress;
 use Illuminate\Bus\Batchable;
@@ -44,6 +45,8 @@ class Command
         $command = $this->data['command'];
         $backup  = $this->data['backup'];
 
+        BackupInProgress::dispatch($uuid, $backup->getAttribute('id'));
+
         $ssh = new SshHelper(config('phpbu.server.' . $backup->getAttribute('server')), 1200);
 
         $progressEntry = Progress::query()
@@ -58,5 +61,7 @@ class Command
                 'log'       => $process->getError() === '' ? 'OK' : $process->getError(),
             ]
         );
+
+        BackupInProgress::dispatch($uuid, $backup->getAttribute('id'));
     }
 }

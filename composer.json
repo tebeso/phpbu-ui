@@ -9,6 +9,7 @@
   "license": "MIT",
   "require": {
     "php": "^8.0.2",
+    "beyondcode/laravel-websockets": "^1.14",
     "divineomega/php-ssh-connection": "^2.2",
     "guzzlehttp/guzzle": "^7.2",
     "icewind/smb": "^3.5",
@@ -16,19 +17,21 @@
     "laravel/sanctum": "^3.0",
     "laravel/tinker": "^2.7",
     "laravel/ui": "^4.2",
+    "php-amqplib/php-amqplib": ">=3.1",
     "phpseclib/phpseclib": "^2.0",
+    "pusher/pusher-php-server": "^7.2",
     "symfony/process": "^6.2",
-    "vladimir-yuldashev/laravel-queue-rabbitmq": ">=11.3",
-    "php-amqplib/php-amqplib": ">=3.1"
+    "vladimir-yuldashev/laravel-queue-rabbitmq": ">=11.3"
   },
   "require-dev": {
-    "roave/security-advisories": "dev-latest",
     "fakerphp/faker": "^1.9.1",
     "laravel/pint": "^1.0",
     "laravel/sail": "^1.0.1",
+    "laravel/telescope": "^4.14",
     "mockery/mockery": "^1.4.4",
     "nunomaduro/collision": "^6.1",
     "phpunit/phpunit": "^9.5.10",
+    "roave/security-advisories": "dev-latest",
     "spatie/laravel-ignition": "^1.0"
   },
   "autoload": {

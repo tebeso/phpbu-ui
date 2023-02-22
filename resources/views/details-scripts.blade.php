@@ -1,7 +1,6 @@
 @section('additional-footer-scripts')
     <script>
-        let interval = null;
-        let url      = null;
+        let url = null;
 
         let confirmation  = $('#confirmation');
         let restoreButton = $('#restore-button');
@@ -31,12 +30,7 @@
                 confirmation.prop('disabled', true);
                 loadingCircle.removeClass('visually-hidden');
 
-                url      = '/restore/status/' + $('#uuid').val();
-                interval = setInterval(function () {
-                    let status = $.parseJSON(getStatus(url).responseText);
-                    updateLog(status['log']);
-                    updateProgress(status['progress']);
-                }, 1000);
+                url = '/restore/status/' + $('#uuid').val();
             });
         });
 
@@ -60,18 +54,18 @@
 
         function updateProgress(progress) {
 
+            progress = parseInt(progress);
+
             $('#progress').text(progress);
             $('#progress-bar').css('width', progress + '%');
 
             restoreButton.prop('disabled', true);
 
-            if (parseInt(progress) === 100) {
+            if (progress === 100) {
                 confirmation.prop('disabled', false).val('').keyup();
                 loadingCircle.addClass('visually-hidden');
 
                 generateUuid();
-                clearInterval(interval);
-
                 setTimeout(
                     function () {
                         $('ul').find('li').delay(2000).removeAttr('style');
@@ -84,5 +78,10 @@
                 $('ul').find('li:contains(' + item['command'] + ') ').css('text-decoration', 'line-through');
             });
         }
+
+        Echo.channel('phpbu').listen('.BackupInProgress', (response) => {
+            updateLog(response['status']['log']);
+            updateProgress(response['status']['progress']);
+        });
     </script>
 @endsection

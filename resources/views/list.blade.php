@@ -39,3 +39,19 @@
         </tbody>
     </table>
 @endsection
+
+@section('additional-footer-scripts')
+    <script>
+        let loadingDiv = $('#loading');
+        let loading    = new bootstrap.Modal(loadingDiv);
+        
+        Echo.channel('phpbu').listen('.BackupInProgress', (response) => {
+            if (response['status']['progress'] === 100) {
+                loading.hide();
+            } else {
+                loadingDiv.find('.modal-body').html('Restore in progress');
+                loading.show();
+            }
+        });
+    </script>
+@endsection

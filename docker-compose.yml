@@ -16,6 +16,7 @@ services:
       - '${DOCKER_PHP_PORT_HTTP}:80'
       - '${DOCKER_PHP_PORT_HTTPS}:443'
       - '${DOCKER_PHP_PORT_SUPERVISOR}:9001'
+      - '${DOCKER_PHP_PORT_WEBSOCKET}:6001'
     volumes:
       # Work data
       - .:/var/www/html

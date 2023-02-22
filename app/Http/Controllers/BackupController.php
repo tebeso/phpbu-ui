@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Events\BackupInProgress;
 use App\Helper\CommandHelper;
 use App\Helper\ConfigHelper;
 use App\Helper\FileHelper;

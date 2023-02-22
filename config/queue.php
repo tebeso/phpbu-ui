@@ -31,7 +31,7 @@ return [
     'connections' => [
 
         'sync' => [
-            'driver' => 'rabbitmq',
+            'driver' => 'sync',
         ],
 
         'database' => [

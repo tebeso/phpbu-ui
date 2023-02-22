@@ -2,7 +2,7 @@
     <div class="modal-dialog modal-dialog-centered">
         <div class="modal-content">
             <div class="modal-body">
-                Scanning for Backups - please wait
+
             </div>
         </div>
     </div>
