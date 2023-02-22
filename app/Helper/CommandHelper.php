@@ -2,6 +2,7 @@
 
 namespace App\Helper;
 
+use App\Models\JobBatches;
 use App\Models\Progress;
 use Carbon\Carbon;
 use Illuminate\Support\Collection;
@@ -62,5 +63,22 @@ class CommandHelper
             'progress' => $completed / $total * 100,
             'log'      => $entries->get(),
         ];
+    }
+
+
+    /**
+     * Returns backup id if a restore job is running.
+     *
+     * @return false|string
+     */
+    public static function checkRestoreRunning(): bool | string
+    {
+        $uuid = JobBatches::query()->whereNot('pending_jobs', 0)->first()?->getAttribute('name');
+
+        if ($uuid === null) {
+            return false;
+        }
+
+        return Progress::query()->where('uuid', $uuid)->first()?->getAttribute('backup_id') ?? false;
     }
 }

@@ -36,6 +36,7 @@ class BackupInProgress extends Event implements ShouldBroadcastNow
         $this->backupId = $backupId;
     }
 
+
     /**
      * @return string
      */
@@ -43,6 +44,7 @@ class BackupInProgress extends Event implements ShouldBroadcastNow
     {
         return 'BackupInProgress';
     }
+
 
     /**
      * @return int[]
@@ -58,6 +60,7 @@ class BackupInProgress extends Event implements ShouldBroadcastNow
         ];
     }
 
+
     /**
      * Get the channels the event should broadcast on.
      *
@@ -65,6 +68,6 @@ class BackupInProgress extends Event implements ShouldBroadcastNow
      */
     public function broadcastOn(): Channel | PrivateChannel
     {
-        return new Channel('phpbu');
+        return new Channel('phpbu.'.$this->backupId);
     }
 }

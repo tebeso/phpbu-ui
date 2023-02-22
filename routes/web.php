@@ -24,6 +24,7 @@ Route::middleware([Authenticate::class])->group(function () {
     Route::any('/details/{backupId}', [BackupController::class, 'indexDetails']);
 
     Route::any('/restore/status/{uuid}', [CommandHelper::class, 'status']);
+    Route::any('/restore/check-running/', [CommandHelper::class, 'checkRestoreRunning']);
     Route::any('/restore', [BackupController::class, 'restore']);
 
     Route::any('/generate-uuid', [BackupController::class, 'generateUuid']);

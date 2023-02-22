@@ -13,7 +13,7 @@
 
         confirmation.keyup(function () {
             let currentValue  = $(this).val();
-            let requiredValue = $('td:first-child').text();
+            let requiredValue = $('td:nth-child(2)').text();
 
             if (currentValue === requiredValue && $('#no-credentials').length === 0) {
                 restoreButton.prop('disabled', false);
@@ -79,7 +79,7 @@
             });
         }
 
-        Echo.channel('phpbu').listen('.BackupInProgress', (response) => {
+        Echo.channel('phpbu.' + $('td:first-child').text()).listen('.BackupInProgress', (response) => {
             updateLog(response['status']['log']);
             updateProgress(response['status']['progress']);
         });

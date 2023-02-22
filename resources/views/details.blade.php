@@ -16,6 +16,7 @@
     <table class="table table-sm">
         <thead>
         <tr>
+            <th scope="col">ID</th>
             <th scope="col">Filename</th>
             <th scope="col">Date</th>
             <th scope="col">Time</th>
@@ -23,6 +24,7 @@
         </thead>
         <tbody>
         <tr>
+            <td>{{ $backup->getAttribute('id') }}</td>
             <td>{{ $backup->getAttribute('filename') }}</td>
             <td>{{  $carbon::createFromTimestamp($backup->getAttribute('file_created_at'), new DateTimeZone('Europe/Berlin'))->format('d.m.Y') }}</td>
             <td>{{  $carbon::createFromTimestamp($backup->getAttribute('file_created_at'), new DateTimeZone('Europe/Berlin'))->format('H:i') }}</td>

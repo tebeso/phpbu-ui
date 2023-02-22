@@ -13,6 +13,6 @@ use Illuminate\Support\Facades\Broadcast;
 |
 */
 
-Broadcast::channel('phpbu', function () {
+Broadcast::channel('phpbu.{backupId}', function () {
     return true;
 });
