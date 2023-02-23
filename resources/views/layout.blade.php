@@ -35,7 +35,10 @@
     </div>
 </div>
 
-@include('footer-scripts')
+@if(Auth::check())
+    @include('footer-scripts')
+@endif
+
 @yield('additional-footer-scripts')
 
 </body>

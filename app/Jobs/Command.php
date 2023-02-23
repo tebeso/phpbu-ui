@@ -24,7 +24,9 @@ class Command
      */
     public int $timeout = 3600;
 
-
+    /**
+     * @var array
+     */
     protected array $data;
 
     /**
